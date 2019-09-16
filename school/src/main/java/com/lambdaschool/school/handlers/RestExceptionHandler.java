@@ -55,4 +55,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         errorDetail.setDeveloperMessage("Rest Handler Not Found (check for valid URI)");
         return new ResponseEntity<>(errorDetail, null, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler({Exception.class})
+    protected ResponseEntity<Object> handleAllExceptions(Exception ex, HttpServletRequest request)
+    {
+        ErrorDetail errorDetail = new ErrorDetail();
+        errorDetail.setTimestamp(new Date().getTime());
+        errorDetail.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDetail.setTitle("Exception");
+        errorDetail.setDetail(ex.getMessage());
+        errorDetail.setDeveloperMessage(ex.getClass()
+                .getName());
+        return new ResponseEntity<>(errorDetail, null, HttpStatus.BAD_REQUEST);
+    }
 }
